@@ -34,42 +34,66 @@
                 font-size: 96px;
             }
             
-            table.thRow th{ padding: 10px; border: 1px solid #cccccc;
+            
+            table{ width: 75%; margin: 0 auto; float: left;}
+
+            
+            .thRow th, .dRow td{ padding: 10px; border: 1px solid #cccccc; margin 0px; }
+            
+            .navRow{ width: 100%; margin: 0 auto; float: left;}
+            
+            .prev, .next{width: 10%}
+            
+            .search{width: 80%}
+            
+            .innerBody{ width: 75%; margin: 0 auto;}
+
+
+            
+            .prev {float: left;}
+            .next{float: right;}
         </style>
     </head>
+    
+
     <body>
         <div class="container">
             <div class="content">
                 <div class="title">search</div>
-                <table>
-                	
-	                <tr class="thRow">
-		                <?php 
-		                foreach($columns as $th){?>
-	                		<th><?php echo $th; ?></th>
-	                    <?php }?>
+                <div class="innerBody">
+                	<div class="navRow">
+	                	<div class="prev"><a href="">PREV</a></div>
+	                	<div class="next"><a href="">NEXT</a></div>
+                	</div>
+	                <table>
+	                	<tbody>
+		                <tr class="thRow">
+			                <?php 
+			                foreach($columns as $th){?>
+		                		<th><?php echo $th; ?></th>
+		                    <?php }?>
+		                
+		                </tr>
+		                
+		                
+	               		<?php 
+	               		foreach($rows as $data){
+	               			echo "<tr class='dRow'>";
+		                	foreach($columns as $rkey=>$rVal){
+		                		
+		                		echo "<td>".(isset($data[$rkey])?$data[$rkey]:"")."</td>";
+		                		
+		                	}
+		                	echo "</tr>";
+	               		}?>
+		                </tbody>
+		                
 	                
-	                </tr>
 	                
 	                
-               		<?php 
-               		foreach($rows as $data){
-               			echo "<tr>";
-	                	foreach($columns as $rkey=>$rVal){
-	                		
-	                		echo "<td>".(isset($data[$rkey])?$data[$rkey]:"")."</td>";
-	                		
-	                	}
-	                	echo "</tr>";
-               		}?>
 	                
-	                
-                
-                
-                
-                
-                </table>
-                
+	                </table>
+                </div>
                 
                 
             </div>
