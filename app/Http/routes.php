@@ -15,6 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('search', 'SearchController@showView')->name('search');
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -27,5 +29,7 @@ Route::get('/', function () {
 */
 
 Route::group(['middleware' => ['web']], function () {
+	
+	
     //
 });

@@ -65,7 +65,7 @@ class Socrata {
   }
 
   // Convenience function for GET calls
-  public function get($path, $params = array()) {
+  public function get($params = array(), $path="") {
 
     $handle = $this->create_curl_handle($path, $params);
 

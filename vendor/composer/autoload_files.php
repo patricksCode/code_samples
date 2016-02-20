@@ -15,5 +15,5 @@ return array(
     '5255c38a0faeba867671b61dfda6d864' => $vendorDir . '/paragonie/random_compat/lib/random.php',
     'f0906e6318348a765ffb6eb24e0d0938' => $vendorDir . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
     '58571171fd5812e6e447dce228f52f4d' => $vendorDir . '/laravel/framework/src/Illuminate/Support/helpers.php',
-    '3316707aeec0f4d2879c99a87a32abd2' => $vendorDir . '/socrata/soda-php/public/socrata.php',
+    '3316707aeec0f4d2879c99a87a32abd2' => $vendorDir . '/socrata/socrata.php',
 );
