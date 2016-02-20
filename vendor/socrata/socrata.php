@@ -11,6 +11,7 @@ class Socrata {
   private $user_name = "";
   private $password = "";
 
+
   // Basic constructor
   public function __construct($root_url = "", $app_token = "",  $user_name = "", $password = "") {
     $this->root_url = $root_url;
@@ -19,6 +20,8 @@ class Socrata {
     $this->password = $password;
     return true;
   }
+  
+
 
   // create query URL based on the root URL, path, and parameters
   public function create_query_url($path, $params = array()) {
@@ -42,7 +45,8 @@ class Socrata {
 
     // The full URL for this resource is the root + the path
     $full_url = $this->create_query_url($path, $params);
-
+    
+    
     // Build up the headers we'll need to pass
     $headers = array(
       'Accept: application/json',
