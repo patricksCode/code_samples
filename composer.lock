@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ea1fee525914154e6d6bbf071697b5a1",
-    "content-hash": "8b1485987e7c5949da82435d403e52e8",
+    "hash": "12993725318d798877d749cb65d08dfe",
+    "content-hash": "0ebb182bbbcb8cefbb5062fc3ea2d65c",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -893,6 +893,39 @@
                 "shell"
             ],
             "time": "2015-11-12 16:18:56"
+        },
+        {
+            "name": "socrata/soda-php",
+            "version": "v1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/socrata/soda-php.git",
+                "reference": "da79e130bd029c3f8812ade08358fefe96b75f11"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/socrata/soda-php/zipball/da79e130bd029c3f8812ade08358fefe96b75f11",
+                "reference": "da79e130bd029c3f8812ade08358fefe96b75f11",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": "~5.3"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "public/socrata.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "A simple library to make it easier to access SODA services from PHP",
+            "homepage": "http://dev.socrata.com",
+            "keywords": [
+                "SODA",
+                "socrata"
+            ],
+            "time": "2014-10-21 18:16:21"
         },
         {
             "name": "swiftmailer/swiftmailer",
