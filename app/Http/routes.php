@@ -17,6 +17,8 @@ Route::get('/', function () {
 
 Route::get('search', 'SearchController@showView')->name('search');
 
+Route::get('gd', 'SearchController@getData')->name('gd');
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes

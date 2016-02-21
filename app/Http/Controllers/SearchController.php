@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use DB;
 use \Socrata;
 use App\Http\Controllers\SearchController;
 
@@ -54,7 +54,9 @@ class SearchController extends Controller
 			
 	);*/
 	
-	protected $columns = array( "physician_profile_id"=>"physician_id",
+	protected $columns = array( 
+			"record_id"=>"record_id",
+			"physician_profile_id"=>"physician_id",
 			"teaching_hospital_name"=>"hospital name",
 			"physician_first_name"=>"first name",
 			"physician_middle_name"=>"middle name",
@@ -67,11 +69,12 @@ class SearchController extends Controller
 			"physician_primary_type"=>"type",
 			"physician_specialty"=>"specialty",
 			"applicable_manufacturer_or_applicable_gpo_making_payment_name"=>"company making payment",
-			"applicable_manufacturer_or_applicable_gpo_making_payment_state"=>"company_making_payment_state",
+			"applicable_manufacturer_or_applicable_gpo_making_payment_state"=>"company making payment state",
 			"total_amount_of_payment_usdollars"=>"amount",
-			"date_of_payment"=>"payment_date",
-			"form_of_payment_or_transfer_of_value"=>"form_of_payment",
-			"nature_of_payment_or_transfer_of_value"=>"nature_of_payment",
+			"date_of_payment"=>"payment date",
+			"form_of_payment_or_transfer_of_value"=>"form of payment",
+			"nature_of_payment_or_transfer_of_value"=>"nature of payment",
+			"contextual_information"=>"contextual information",
 			"name_of_associated_covered_drug_or_biological1"=>"drug1",
 			"name_of_associated_covered_drug_or_biological2"=>"drug2",
 			"name_of_associated_covered_drug_or_biological3"=>"drug3",
@@ -147,17 +150,59 @@ class SearchController extends Controller
         			]);
     }
     
+    public function getData(){
+    	
+		$limit=1000;
+		$offset=0;
+    	
+    	$totalRecords =$this->getODTotalRecords();
+    	
+    	$lastRecordUpdated = DB::table('upload_log')->max('last_record');
+    	
+    	//print_r($totalRecords);
+    	
+    	print_r($lastRecordUpdated);
+    	
+    	
+		print_r(array_keys($this->columns));
+    	
+    	
+    	$query=array('$select'=>array_keys($this->columns));
+    	$params = $this->getParams($query, $limit, $offset);
+    	
+    	$response = $this->socrata->get($params);
+    	
+    	foreach($response as $row){
+    		
+    		
+    	}
+    	
+    	print_r($response);
+    	
+    	
+    }
+    
     public function searchApi()
     {
 
     	return view('search',  ['name' => 'James']);
     }
     
+    private function getODTotalRecords(){
+    	$query=array('$query'=>"select count(record_id) as total");
+    	$params = $this->getParams($query);
+    	 
+    	$response = $this->socrata->get($params);
+    	 
+    	return $response[0]['total'];
+    	
+    }
+    
     private function prepResp($data){
     	if(!is_array($data)){
     		return false;
     	}
-    	//print_r($data);
+
     	$newParam=array();
     	$tempCols=array("");
     	$currCols=array();
@@ -168,6 +213,7 @@ class SearchController extends Controller
 						"name_of_associated_covered_drug_or_biological3",
 						"name_of_associated_covered_drug_or_biological4",
 						"name_of_associated_covered_drug_or_biological5",);
+    	
    		$devices = array("name_of_associated_covered_device_or_medical_supply1",
 							"name_of_associated_covered_device_or_medical_supply2",
 							"name_of_associated_covered_device_or_medical_supply3",
@@ -226,9 +272,7 @@ class SearchController extends Controller
     			$currCols[$cKey]=$cVal;
     		}
     	}
-    	
-    	//print_r($currCols);
-    	
+
     	
     	return array($newParam, $currCols);
     	
@@ -246,13 +290,15 @@ class SearchController extends Controller
     		}
     	}
     	
-    	if(!isset($params['$select'])){
-    		$params['$select'] = implode(", ",$this->defaultColumns);
+    	if(!isset($params['$query'])){
+	    	if(!isset($params['$select'])){
+	    		$params['$select'] = implode(", ",$this->defaultColumns);
+	    	}
+	    	
+	    	//$params['$select'] = implode(", ",$this->defaultColumns);
+	    	$params['$limit'] = $limit;
+	    	$params['$offset'] =$offset;
     	}
-    	
-    	//$params['$select'] = implode(", ",$this->defaultColumns);
-    	$params['$limit'] = $limit;
-    	$params['$offset'] =$offset;
     	
     	return $params;
     }

@@ -40,33 +40,33 @@ class Socrata {
     return $full_url;
   }
 
-  // create cURL handle, which can then be submitted via get
-  public function create_curl_handle($path, $params = array()) {
+	// create cURL handle, which can then be submitted via get
+	public function create_curl_handle($path, $params = array()) {
 
-    // The full URL for this resource is the root + the path
-    $full_url = $this->create_query_url($path, $params);
+    	// The full URL for this resource is the root + the path
+    	$full_url = $this->create_query_url($path, $params);
     
     
-    // Build up the headers we'll need to pass
-    $headers = array(
-      'Accept: application/json',
-      'Content-type: application/json',
-      "X-App-Token: " . $this->app_token
-    );
+	    // Build up the headers we'll need to pass
+	    $headers = array(
+	      'Accept: application/json',
+	      'Content-type: application/json',
+	      "X-App-Token: " . $this->app_token
+	    );
 
-    // Time for some cURL magic...
-    $handle = curl_init();
-    curl_setopt($handle, CURLOPT_URL, $full_url);
-    curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
+	    // Time for some cURL magic...
+	    $handle = curl_init();
+	    curl_setopt($handle, CURLOPT_URL, $full_url);
+	    curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
+	    curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
 
-    // Set up request, and auth, if configured
-    if($this->user_name != "" && $this->password != "") {
-      curl_setopt($handle, CURLOPT_USERPWD, $this->user_name . ":" . $this->password);
-    }
+	    // Set up request, and auth, if configured
+	    if($this->user_name != "" && $this->password != "") {
+	      curl_setopt($handle, CURLOPT_USERPWD, $this->user_name . ":" . $this->password);
+	    }
 
-    return $handle;
-  }
+    	return $handle;
+	}
 
   // Convenience function for GET calls
   public function get($params = array(), $path="") {
