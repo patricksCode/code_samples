@@ -61,12 +61,21 @@
             <div class="content">
                 <div class="title">search</div>
                 <div class="innerBody">
-                	<div class="navRow">
-	                	<div class="prev"><a href="">PREV</a></div>
-	                	<div class="next"><a href="">NEXT</a></div>
-                	</div>
+
 	                <table>
 	                	<tbody>
+		                	<tr>
+		                	<td colspan="<?php echo count($columns)?>">
+		                		<div>
+		                			<div class="prev">
+		                				<a href="<?php echo $url ?>?limit=<?php echo $limit?>&offset=<?php echo $prevOffset; ?>">PREV</a>
+		                			</div>
+		                			<div class="next">
+		                				<a href="<?php echo $url ?>?limit=<?php echo $limit?>&offset=<?php echo $nextOffset; ?>">NEXT</a>
+		                			</div>
+		                		</div>
+		                	</td>
+		                	</tr>
 		                <tr class="thRow">
 			                <?php 
 			                foreach($columns as $th){?>

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 
-use App\Http\Controllers\SearchController;
 use \Socrata;
+use App\Http\Controllers\SearchController;
+
+use Illuminate\Http\Request;
 
 
 class SearchController extends Controller
@@ -109,28 +111,40 @@ class SearchController extends Controller
 		
 	}
 
-    public function showView()
+    public function showView(Request $request)
     {
     	
     	
+  
+    	
+    	$limit=($request->has('limit') && $request->input('limit')>=10 && $request->input('limit')<=500)?$request->input('limit'):20;
+    	$offset=$request->has('offset')?$request->input('offset'):0;
+    	
+    	$prevOffset=($offset-$limit)>0?($offset-$limit):0;
+    	
+    	$nextOffset=$offset+$limit;
+
 
     	
-    	//print_r($params);
-    	
-    	$params = $this->getParams();
+    	$params = $this->getParams(array(), $limit, $offset);
     	
     	$response = $this->socrata->get($params);
-    	//print_r(json_encode($response));
+
     	
     	list($data, $colList) = $this->prepResp($this->socrata->get($params));
     	
-    	
-    	//print_r($data);
-    	//print_r($colList);
+
     	
     	
 
-        return view('search',  ['rows' => $data, 'columns'=>$colList]);
+        return view('search',  ['rows' => $data, 
+        						'columns'=>$colList, 
+        						'limit'=>$limit,
+        						'nextOffset'=>$nextOffset,
+        						'prevOffset'=>$prevOffset,
+        						"url"=>$request->url()
+        		
+        			]);
     }
     
     public function searchApi()
@@ -162,9 +176,11 @@ class SearchController extends Controller
    				);
     	
     	foreach($data as $rKey=>$row){
+    		
     		$newParam[$rKey]['name']=array();
     		$newParam[$rKey]['drugs']=array();
     		$newParam[$rKey]['devices']=array();
+    		
     		foreach($row as $key=>$col){
     			//echo $key;
     			//print_r($newParam);
