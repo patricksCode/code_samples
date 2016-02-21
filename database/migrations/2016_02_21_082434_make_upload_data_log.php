@@ -15,9 +15,8 @@ class MakeUploadDataLog extends Migration
     {
         	Schema::create('upload_log', function (Blueprint $table) {
 	            $table->increments('id');
-	            $table->integer("start_record");
 	            $table->string('last_record');
-	            $table->index(array("start_record", "last_record"));
+	            $table->index(array("last_record"));
 	            $table->timestamps();
 
 	    	});

@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use DB;
+
+use \App\Models\Payment;
+
+use \App\Models\UpdateLog;
+
 use \Socrata;
 use App\Http\Controllers\SearchController;
 
@@ -153,31 +158,41 @@ class SearchController extends Controller
     public function getData(){
     	
 		$limit=1000;
-		$offset=0;
+		
+		
+		$query=array('$select'=>array_keys($this->columns), '$order'=>"record_id");
     	
     	$totalRecords =$this->getODTotalRecords();
     	
     	$lastRecordUpdated = DB::table('upload_log')->max('last_record');
     	
-    	//print_r($totalRecords);
+    	if($lastRecordUpdated<$totalRecords){
     	
-    	print_r($lastRecordUpdated);
-    	
-    	
-		print_r(array_keys($this->columns));
-    	
-    	
-    	$query=array('$select'=>array_keys($this->columns));
-    	$params = $this->getParams($query, $limit, $offset);
-    	
-    	$response = $this->socrata->get($params);
-    	
-    	foreach($response as $row){
-    		
-    		
+	    	$offset=$lastRecordUpdated?$lastRecordUpdated:0;
+	    	
+	    	$params = $this->getParams($query, $limit, $offset);
+	    	
+	    	$response = $this->socrata->get($params);
+	    	
+	    	foreach($response as $key=>$row){
+	    		
+	    		$payment = \App\Models\Payment::create($row);
+
+	    		
+	    	}
+
+	    	
+	    	$logEntry = new \App\Models\UpdateLog;
+	    	
+	    	$logEntry->start_record = 0;
+	    	
+	    	$logEntry->last_record = $offset+$limit;
+	    	
+	    	echo $logEntry->last_record;
+	    	
+	    	$logEntry->save();
     	}
-    	
-    	print_r($response);
+
     	
     	
     }
