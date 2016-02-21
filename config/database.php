@@ -49,10 +49,10 @@ return [
 
         'mysql' => [
             'driver'    => 'mysql',
-            'host'      => env('DB_HOST', 'localhost'),
+            'host'      => env('DB_HOST', '127.0.0.1'),
             'database'  => env('DB_DATABASE', 'reorg-test'),
-            'username'  => env('DB_USERNAME', 'db_user'),
-            'password'  => env('DB_PASSWORD', 'JABJhZBNpyQpBERj'),
+            'username'  => env('DB_USERNAME', 'dbUser'),
+            'password'  => env('DB_PASSWORD', 'AxJGKXDaYvMdwK7v'),
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',

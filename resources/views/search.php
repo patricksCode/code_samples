@@ -68,7 +68,9 @@
 		                	<td colspan="<?php echo count($columns)?>">
 		                		<div>
 		                			<div class="prev">
+										<?php //if(($prevOffset-$limit)>=-1){?>
 		                				<a href="<?php echo $url ?>?limit=<?php echo $limit?>&offset=<?php echo $prevOffset; ?>">PREV</a>
+										<?php //} ?>
 		                			</div>
 		                			<div class="next">
 		                				<a href="<?php echo $url ?>?limit=<?php echo $limit?>&offset=<?php echo $nextOffset; ?>">NEXT</a>
