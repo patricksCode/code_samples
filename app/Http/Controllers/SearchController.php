@@ -3,15 +3,13 @@
 namespace App\Http\Controllers;
 
 use DB;
-
 use \App\Models\Payment;
-
 use \App\Models\UpdateLog;
-
 use \Socrata;
 use App\Http\Controllers\SearchController;
-
 use Illuminate\Http\Request;
+
+
 
 
 class SearchController extends Controller
@@ -118,12 +116,35 @@ class SearchController extends Controller
 		$this->socrata = new \Socrata($this->endpoint, $this->appKey);
 		
 	}
-
+	
+	
+	public function searchApi(Request $request)
+	{
+		//echo "it works";
+		//return view('search',  ['name' => 'James']);
+		
+		$limit=($request->has('limit') && $request->input('limit')>=10 && $request->input('limit')<=1000)?$request->input('limit'):20;
+		$offset=$request->has('offset')?$request->input('offset'):0;
+		
+		
+		$payments = DB::table('payments')->select($this->defaultColumns)->skip($offset)->take($limit)->get();
+		
+		list($data, $colList) = $this->prepResp($payments);
+		
+		//print_r($colList);
+		
+		$respData=array($data, $colList);
+		
+		return response()->json($respData);
+	}
+	
+	
+	
+	/*
+	 * the Payments homepage
+	 */
     public function showView(Request $request)
     {
-    	
-    	
-  
     	
     	$limit=($request->has('limit') && $request->input('limit')>=10 && $request->input('limit')<=500)?$request->input('limit'):20;
     	$offset=$request->has('offset')?$request->input('offset'):0;
@@ -148,20 +169,22 @@ class SearchController extends Controller
         return view('search',  ['rows' => $data, 
         						'columns'=>$colList, 
         						'limit'=>$limit,
-        						'nextOffset'=>$nextOffset,
-        						'prevOffset'=>$prevOffset,
-        						"url"=>$request->url()
+        						'offset'=>$offset,
+        						"url"=>url()
         		
         			]);
     }
+   
     
+    
+    
+    /*
+     * script to get data from OpenPaymentsData.CMS.gov
+     */ 
     public function getData(){
     	
 		$limit=1000;
 		
-		
-		$query=array('$select'=>array_keys($this->columns), '$order'=>"record_id");
-    	
     	$totalRecords =$this->getODTotalRecords();
     	
     	$lastRecordUpdated = DB::table('upload_log')->max('last_record');
@@ -170,6 +193,7 @@ class SearchController extends Controller
     	
 	    	$offset=$lastRecordUpdated?$lastRecordUpdated:0;
 	    	
+	    	$query=array('$select'=>array_keys($this->columns), '$order'=>"record_id");
 	    	$params = $this->getParams($query, $limit, $offset);
 	    	
 	    	$response = $this->socrata->get($params);
@@ -197,12 +221,12 @@ class SearchController extends Controller
     	
     }
     
-    public function searchApi()
-    {
 
-    	return view('search',  ['name' => 'James']);
-    }
     
+    
+    /*
+     * method to get total records count from OpenPaymentsData.CMS.gov
+     */
     private function getODTotalRecords(){
     	$query=array('$query'=>"select count(record_id) as total");
     	$params = $this->getParams($query);
@@ -213,6 +237,9 @@ class SearchController extends Controller
     	
     }
     
+    /*
+     *  method to prepare data before it is sent to the view.
+     */
     private function prepResp($data){
     	if(!is_array($data)){
     		return false;
@@ -222,7 +249,7 @@ class SearchController extends Controller
     	$tempCols=array("");
     	$currCols=array();
     	
-    	//$name = array("","physician_first_name","physician_middle_name","physician_last_name");
+
     	$drugs = array("","name_of_associated_covered_drug_or_biological1",
 						"name_of_associated_covered_drug_or_biological2",
 						"name_of_associated_covered_drug_or_biological3",
@@ -230,24 +257,20 @@ class SearchController extends Controller
 						"name_of_associated_covered_drug_or_biological5",);
     	
    		$devices = array("name_of_associated_covered_device_or_medical_supply1",
-							"name_of_associated_covered_device_or_medical_supply2",
-							"name_of_associated_covered_device_or_medical_supply3",
-							"name_of_associated_covered_device_or_medical_supply4",
-							"name_of_associated_covered_device_or_medical_supply5"
+						"name_of_associated_covered_device_or_medical_supply2",
+						"name_of_associated_covered_device_or_medical_supply3",
+						"name_of_associated_covered_device_or_medical_supply4",
+						"name_of_associated_covered_device_or_medical_supply5"
    				);
     	
     	foreach($data as $rKey=>$row){
     		
-    		$newParam[$rKey]['name']=array();
-    		$newParam[$rKey]['drugs']=array();
-    		$newParam[$rKey]['devices']=array();
+    		//$newParam[$rKey]['name']=array();
+    		//$newParam[$rKey]['drugs']=array();
+    		//$newParam[$rKey]['devices']=array();
     		
     		foreach($row as $key=>$col){
-    			//echo $key;
-    			//print_r($newParam);
-    			/*if(array_search($key,$name)){
-    				$newParam[$rKey]['name'][$key]=$col;
-    			}*/
+
     			if(array_search($key,$drugs)){
     				$newParam[$rKey]['drugs'][]=$col;
     				

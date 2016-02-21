@@ -19,6 +19,8 @@ Route::get('search', 'SearchController@showView')->name('search');
 
 Route::get('gd', 'SearchController@getData')->name('gd');
 
+Route::get('ep/fe', 'SearchController@searchApi')->name('api');
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
