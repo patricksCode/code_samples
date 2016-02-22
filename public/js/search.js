@@ -3,13 +3,13 @@ angular.module('search', [])
 
 	this.apiUrl = apiUrl+"/ep/fe";
 	
-	this.limit = limit
+	$scope.limit = limit
 	
 	this.offset = offset;
 	
-	this.nextOffset = offset+limit;
+	var nextOffset = offset+limit;
 	
-	this.prevOffset = offset-limit;
+	var prevOffset = offset-limit;
 
 
 	
@@ -19,12 +19,28 @@ angular.module('search', [])
 	  };
 	  
 	this.doNext = function doNext() {
-		var fullUrl = this.apiUrl+"?offset="+this.nextOffset+"&limit="+this.limit;
+		var fullUrl = this.apiUrl+"?offset=" + nextOffset + "&limit="+$scope.limit;
 	    $http.get(fullUrl).then(function(response) {
 	    	$scope.rows = response.data[0];
 	    	$scope.columns = response.data[1];
 
+	    	nextOffset = parseInt(response.data[2]) + $scope.rows.length;
+
+
 	    });
 	    
 	  };
+	  
+		this.doPrev = function doPrev() {
+			var fullUrl = this.apiUrl+"?offset=" + prevOffset + "&limit="+$scope.limit;
+		    $http.get(fullUrl).then(function(response) {
+		    	$scope.rows = response.data[0];
+		    	$scope.columns = response.data[1];
+
+		    	prevOffset = parseInt(response.data[2]) - $scope.rows.length;
+
+
+		    });
+		    
+		  };
 });

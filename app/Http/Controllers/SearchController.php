@@ -133,7 +133,7 @@ class SearchController extends Controller
 		
 		//print_r($colList);
 		
-		$respData=array($data, $colList);
+		$respData=array($data, $colList, $offset);
 		
 		return response()->json($respData);
 	}
