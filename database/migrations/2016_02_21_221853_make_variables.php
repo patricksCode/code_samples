@@ -1,10 +1,9 @@
 <?php
 
-
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class MakeUploadDataLog extends Migration
+class MakeVariables extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +12,11 @@ class MakeUploadDataLog extends Migration
      */
     public function up()
     {
-        	Schema::create('upload_log', function (Blueprint $table) {
+            Schema::create('variables', function (Blueprint $table) {
 	            $table->increments('id');
-	            $table->integer('last_record');
-	            $table->index("last_record");
+	            $table->string('name');
+	            $table->string('value');
+	            $table->index("name");
 	            $table->timestamps();
 
 	    	});
@@ -29,6 +29,6 @@ class MakeUploadDataLog extends Migration
      */
     public function down()
     {
-    	Schema::drop('upload_log');
+    	Schema::drop('variables');
     }
 }

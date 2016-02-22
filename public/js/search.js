@@ -1,46 +1,55 @@
 angular.module('search', [])
-.controller('searchController', function($scope, $http) {
+.controller('searchController',['$scope', '$http', function($scope, $http) {
 
-	this.apiUrl = apiUrl+"/ep/fe";
+	$scope.apiUrl = apiUrl+"/ep/fe";
 	
 	$scope.limit = limit
 	
-	this.offset = offset;
+	$scope.offset = 0;
 	
-	var nextOffset = offset+limit;
 	
-	var prevOffset = offset-limit;
+	var nextOffset;
+	
+	var prevOffset;
 
 
 	
-	this.doPrev = function doPrev() {
-	    window.alert(this.apiUrl);
-	    
-	  };
+
+	
+  $scope.doLoad = function doLoad(fullUrl) {
+			if(fullUrl!=""){
+			    $http.get(fullUrl).then(function(response) {
+			    	$scope.rows = response.data[0];
+			    	$scope.columns = response.data[1];
+			    	$scope.offset = parseInt(response.data[2]);
+			    	
+			    	prevOffset = $scope.offset - $scope.rows.length;
+			    	nextOffset = $scope.offset + $scope.rows.length;
+			    	
+			    	$scope.totalRecords = response.data[3];
+	
+		
+			});
+		}	    
+	};
+	
+  $scope.initPage = function initPage() {
+		var fullUrl = $scope.apiUrl+"?offset="+$scope.offset+"&limit="+$scope.limit;
+		$scope.doLoad(fullUrl);
+    
+  };
 	  
-	this.doNext = function doNext() {
-		var fullUrl = this.apiUrl+"?offset=" + nextOffset + "&limit="+$scope.limit;
-	    $http.get(fullUrl).then(function(response) {
-	    	$scope.rows = response.data[0];
-	    	$scope.columns = response.data[1];
+  $scope.doNext = function doNext() {
+		var fullUrl = $scope.apiUrl+"?offset=" + nextOffset + "&limit="+$scope.limit;
+		$scope.doLoad(fullUrl);
+    
+  };
+  $scope.doPrev = function doPrev() {
+		var fullUrl = $scope.apiUrl+"?offset=" + prevOffset + "&limit="+$scope.limit;
+		$scope.doLoad(fullUrl);
+    
+  };
 
-	    	nextOffset = parseInt(response.data[2]) + $scope.rows.length;
+  
 
-
-	    });
-	    
-	  };
-	  
-		this.doPrev = function doPrev() {
-			var fullUrl = this.apiUrl+"?offset=" + prevOffset + "&limit="+$scope.limit;
-		    $http.get(fullUrl).then(function(response) {
-		    	$scope.rows = response.data[0];
-		    	$scope.columns = response.data[1];
-
-		    	prevOffset = parseInt(response.data[2]) - $scope.rows.length;
-
-
-		    });
-		    
-		  };
-});
+}]);

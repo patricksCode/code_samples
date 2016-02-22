@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use \App\Models\Payment;
 use \App\Models\UpdateLog;
+use \App\Models\Variables;
 use \Socrata;
 use App\Http\Controllers\SearchController;
 use Illuminate\Http\Request;
@@ -24,38 +25,6 @@ class SearchController extends Controller
 	
 	protected $appKey = "DDpGhebFsY3lFGL2r4mZe5Zwl";
 	
-	/*protected $columns = array( "physician_id"=>"physician_profile_id",
-								"hospital_name"=>"teaching_hospital_name",
-								"first_name"=>"physician_first_name",
-								"middle_name"=>"physician_middle_name",
-								"last_name"=>"physician_last_name",
-								"address_line1"=>"recipient_primary_business_street_address_line1",
-								"address_line2"=>"recipient_primary_business_street_address_line2",
-								"city"=>"recipient_city",
-								"state"=>"recipient_state",
-								"zip_code"=>"recipient_zip_code",
-								"type"=>"physician_primary_type",
-								"specialty"=>"physician_specialty",
-								"company_making_payment"=>"applicable_manufacturer_or_applicable_gpo_making_payment_name",
-								"company_making_payment_state"=>"applicable_manufacturer_or_applicable_gpo_making_payment_state",
-								"amount"=>"total_amount_of_payment_usdollars",
-								"payment_date"=>"date_of_payment",
-								"form_of_payment"=>"form_of_payment_or_transfer_of_value",
-								"nature_of_payment"=>"nature_of_payment_or_transfer_of_value",
-								"drug1"=>"name_of_associated_covered_drug_or_biological1",
-								"drug2"=>"name_of_associated_covered_drug_or_biological2",
-								"drug3"=>"name_of_associated_covered_drug_or_biological3",
-								"drug4"=>"name_of_associated_covered_drug_or_biological4",
-								"drug5"=>"name_of_associated_covered_drug_or_biological5",
-								"device1"=>"name_of_associated_covered_device_or_medical_supply1",
-								"device2"=>"name_of_associated_covered_device_or_medical_supply2",
-								"device3"=>"name_of_associated_covered_device_or_medical_supply3",
-								"device4"=>"name_of_associated_covered_device_or_medical_supply4",
-								"device5"=>"name_of_associated_covered_device_or_medical_supply5",
-								"entry_date"=>"payment_publication_date",
-
-			
-	);*/
 	
 	protected $columns = array( 
 			"record_id"=>"record_id",
@@ -120,20 +89,36 @@ class SearchController extends Controller
 	
 	public function searchApi(Request $request)
 	{
-		//echo "it works";
-		//return view('search',  ['name' => 'James']);
+
+
 		
-		$limit=($request->has('limit') && $request->input('limit')>=10 && $request->input('limit')<=1000)?$request->input('limit'):20;
+		//$limit=($request->has('limit') && $request->input('limit')>=10 && $request->input('limit')<=500)?$request->input('limit'):20;
+		if($request->has('limit')){
+			if($request->input('limit')<=10){
+				$limit=10;
+				
+			}
+			elseif($request->input('limit')>=500){
+				$limit=500;
+
+			}else{
+			
+				$limit = $request->input('limit');
+			}
+		}
+		
+		
 		$offset=$request->has('offset')?$request->input('offset'):0;
+		
+		$totalRecords =$this->getODTotalRecords();
 		
 		
 		$payments = DB::table('payments')->select($this->defaultColumns)->skip($offset)->take($limit)->get();
 		
 		list($data, $colList) = $this->prepResp($payments);
 		
-		//print_r($colList);
 		
-		$respData=array($data, $colList, $offset);
+		$respData=array($data, $colList, $offset, $totalRecords);
 		
 		return response()->json($respData);
 	}
@@ -148,31 +133,13 @@ class SearchController extends Controller
     	
     	$limit=($request->has('limit') && $request->input('limit')>=10 && $request->input('limit')<=500)?$request->input('limit'):20;
     	$offset=$request->has('offset')?$request->input('offset'):0;
-    	
-    	$prevOffset=($offset-$limit)>0?($offset-$limit):0;
-    	
-    	$nextOffset=$offset+$limit;
 
-
-    	
-    	$params = $this->getParams(array(), $limit, $offset);
-    	
-    	$response = $this->socrata->get($params);
-
-    	
-    	list($data, $colList) = $this->prepResp($this->socrata->get($params));
-    	
-
-    	
-    	
-
-        return view('search',  ['rows' => $data, 
-        						'columns'=>$colList, 
-        						'limit'=>$limit,
-        						'offset'=>$offset,
-        						"url"=>url()
-        		
-        			]);
+    	return view('search',  [
+    			
+    			'limit'=>$limit,
+    			'offset'=>$offset,
+    			"url"=>url()
+    			]);
     }
    
     
@@ -183,7 +150,7 @@ class SearchController extends Controller
      */ 
     public function getData(){
     	
-		$limit=1000;
+		$limit=500;
 		
     	$totalRecords =$this->getODTotalRecords();
     	
@@ -192,6 +159,7 @@ class SearchController extends Controller
     	if($lastRecordUpdated<$totalRecords){
     	
 	    	$offset=$lastRecordUpdated?$lastRecordUpdated:0;
+	    	
 	    	
 	    	$query=array('$select'=>array_keys($this->columns), '$order'=>"record_id");
 	    	$params = $this->getParams($query, $limit, $offset);
@@ -215,6 +183,13 @@ class SearchController extends Controller
 	    	echo $logEntry->last_record;
 	    	
 	    	$logEntry->save();
+	    	
+	    	echo $lastRecordUpdated."\n\r";
+	    	
+	    	echo "offset: ".$offset."\n\r";
+	    	
+	    	echo "limit: ".$limit ."\n\r";
+	    	
     	}
 
     	
@@ -232,8 +207,12 @@ class SearchController extends Controller
     	$params = $this->getParams($query);
     	 
     	$response = $this->socrata->get($params);
+    	
+    	$variable = \App\Models\Variables::create(['name' => 'totalRecords', 'value'=>$response[0]['total']]);;
+    	
+
     	 
-    	return $response[0]['total'];
+    	return $variable->value;
     	
     }
     

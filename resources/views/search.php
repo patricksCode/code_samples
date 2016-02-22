@@ -72,7 +72,7 @@
             }
             
             .prev, .next{
-            	width: 10%
+            	width: 57px
             }
             
             .search{
@@ -96,6 +96,10 @@
 
             	display: inline;
             }
+            
+            .boldText{
+            	font-weight: 900;
+            }
         </style>
     </head>
     
@@ -104,35 +108,30 @@
         <div class="container">
             <div  class="content">
                 <div class="title">search</div>
-                <div class="innerBody" ng-app="search" ng-controller="searchController as search">
+                <div class="innerBody" ng-app="search" ng-controller="searchController as search" ng-init="initPage()">
 					<div class="navigation">
 						<div class="prev">
-							<?php //if(($prevOffset-$limit)>=-1){?>
 
-                				<a ng-click="search.doPrev()" >PREV</a>
-							<?php //} ?>
+
+                				<a ng-show="offset" ng-click="doPrev()" >PREV</a>&nbsp;
+
                 		</div>
                 		<div class="searchDiv">
-                				<label>Number of Rows:</label> <input type="number" min="0" max="1000" maxlength="3" size="4" ng-model="search.limit">
+                				<label>Number of Rows:</label> <input type="number" min="0" max="500" maxlength="3" size="3" ng-model="limit">
                 				
                 		</div>
                 		<div class="next">
 
-                				<a ng-click="search.doNext()" >NEXT</a>
+                				<a ng-click="doNext()" >NEXT</a>
                 		</div>
-					
+						<div>
+							Row <span class="boldText">{{ offset }}</span> to <span class="boldText">{{ offset + rows.length }}</span> of <span class="boldText">{{ totalRecords }}</span> Records
+						</div>
 					
 					</div>
 	                 <table>
 	                	<tbody>
 
-		               <!-- <tr class="thRow">
-			                <?php 
-			                foreach($columns as $th){?>
-		                		<th><?php echo $th; ?></th>
-		                    <?php }?>
-		                
-		                </tr>-->
 		                 <tr class="thRow">
 
 		                		<th ng-repeat='ch in columns'>{{ ch }}</th>
@@ -144,19 +143,7 @@
 		                	<td ng-repeat='col in row'>{{ col }}</td>
 		                </tr>
 		                
-		                
-	               		<?php 
-	               		/*foreach($rows as $data){
-	               			echo "<tr class='dRow' ng-repeat='row in rows'>";
-		                	foreach($columns as $rkey=>$rVal){
-		                		echo "{{ row }}";
-		                		//echo "<td ng-repeat='col in row'>".(isset($data[$rkey])?$data[$rkey]:"")."{{ col }}</td>";
-		                		
-		                		//echo "<td ng-repeat='col in row'>{{ col }}</td>";
-		                		
-		                	}
-		                	echo "</tr>";
-	               		} */?>
+
 		                </tbody>
 	                </table>
 	                
