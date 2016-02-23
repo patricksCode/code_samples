@@ -12,6 +12,7 @@
     # Handle Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_URI} !\.(?:css|js|jpe?g|gif|png|ttf)$ [NC]
     RewriteRule ^ index.php [L]
 
     # Handle Authorization Header

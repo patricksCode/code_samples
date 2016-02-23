@@ -5,9 +5,11 @@
 
         <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
         
+         <link href="<?php echo URL::asset('css/bootstrap.css') ;?>" rel="stylesheet" type="text/css">
 
-		<script  src="<?php echo URL::asset('js/jquery.js');?>"></script> 
+
 		<script  src="<?php echo URL::asset('js/angular.min.js');?>"></script> 
+		<script  src="<?php echo URL::asset('js/ui-bootstrap-tpls-1.1.2.min.js') ;?>"></script> 
 		<script type="text/javascript">
 
 			var limit =<?php echo $limit?>;
@@ -75,12 +77,16 @@
             	width: 57px
             }
             
+            .prev:hover, .next:hover{
+            	cursor: pointer; cursor: hand;
+            }
+            
             .search{
             	width: 80%
             }
             
             .navigation{
-            	width: 100%;  float: left;
+            	width: 100%;  float: left; margin-bottom: 5px;
             }
 
 
@@ -92,23 +98,67 @@
             .next{
             	float: right;
             }
-            .searchDiv{
+            .countDiv{
 
             	display: inline;
+
             }
             
             .boldText{
             	font-weight: 900;
             }
+            
+           
+		  .typeahead-demo .custom-popup-wrapper {
+		    position: absolute;
+		    top: 100%;
+		    left: 0;
+		    z-index: 1000;
+		    display: none;
+		    background-color: #f9f9f9;
+		  }
+		
+		  .typeahead-demo .custom-popup-wrapper > .message {
+		    padding: 10px 20px;
+		    border-bottom: 1px solid #ddd;
+		    color: #868686;
+		  }
+		
+		  .typeahead-demo .custom-popup-wrapper > .dropdown-menu {
+		    position: static;
+		    float: none;
+		    display: block;
+		    min-width: 160px;
+		    background-color: transparent;
+		    border: none;
+		    border-radius: 0;
+		    box-shadow: none;
+		  }
+  
+  
         </style>
     </head>
-    
 
     <body >
-        <div class="container">
+        <div class="container" ng-app="search" ng-controller="searchController as search" ng-init="initPage()" >
             <div  class="content">
-                <div class="title">search</div>
-                <div class="innerBody" ng-app="search" ng-controller="searchController as search" ng-init="initPage()">
+                <div class="title">payments</div>
+                <p ng-hide="showTable">starting .....</p> 
+                <div class="innerBody" ng-show="showTable">
+                	<div class="navigation">
+
+						<!--<div>
+							<input type="text"  ng-model="searchText" placeholder="Search"><a ng-click="doNext()" >Search >></a>
+						</div>-->
+						
+						<pre>Model: {{asyncSelected | json}}</pre>
+					    <input type="text" ng-model="asyncSelected"  placeholder="Search" uib-typeahead="term.name for term in getPayment($viewValue)" typeahead-on-select='onSelect($item, $model, $label)' typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
+					    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+					    <div ng-show="noResults">
+					      <i class="glyphicon glyphicon-remove"></i> No Results Found
+					    </div>
+					
+					</div>
 					<div class="navigation">
 						<div class="prev">
 
@@ -116,7 +166,7 @@
                 				<a ng-show="offset" ng-click="doPrev()" >PREV</a>&nbsp;
 
                 		</div>
-                		<div class="searchDiv">
+                		<div class="countDiv">
                 				<label>Number of Rows:</label> <input type="number" min="0" max="500" maxlength="3" size="3" ng-model="limit">
                 				
                 		</div>
@@ -124,9 +174,15 @@
 
                 				<a ng-click="doNext()" >NEXT</a>
                 		</div>
+
+					
+					</div>
+					<div class="navigation">
+
 						<div>
 							Row <span class="boldText">{{ offset }}</span> to <span class="boldText">{{ offset + rows.length }}</span> of <span class="boldText">{{ totalRecords }}</span> Records
 						</div>
+
 					
 					</div>
 	                 <table>

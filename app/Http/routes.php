@@ -11,15 +11,32 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'SearchController@showIndex')->name('homepage');
 
-Route::get('search', 'SearchController@showView')->name('search');
+Route::get('search', 'SearchController@showView')->name('searchpage');
 
-Route::get('gd', 'SearchController@getData')->name('gd');
+Route::get('gd', 'SearchController@getData')->name('getdata');
 
 Route::get('ep/fe', 'SearchController@searchApi')->name('api');
+
+Route::get('test', 'SearchController@test')->name('test');
+
+Route::get('uib/template/typeahead/typeahead-popup.html', function(){
+			return view('typeahead-popup', []);
+			
+		})->name('typeahead-popup');
+		
+Route::get('uib/template/typeahead/typeahead-match.html', function(){
+	return view('typeahead-popup', []);
+		
+})->name('typeahead-match');
+
+Route::get('data/airplanes.json', 'SearchController@json')->name('json');
+
+Route::get('index.html', function(){
+	return view('airplanes2', []);
+	
+})->name('index');
 
 /*
 |--------------------------------------------------------------------------
