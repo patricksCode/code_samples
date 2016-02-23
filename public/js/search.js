@@ -113,12 +113,12 @@ searchAPI.controller('searchController',['$scope', '$http','$interval', function
     getterSetter: true
   };
   
-  $scope.onSelect = function ($item, $model, $label) {
+  $scope.onSel = function ($item, $model, $label) {
 	  $scope.showPrev= false;
 	  $scope.showNext= false;
 	  $scope.term = $item.name;
 	  var params = "?offset="+$scope.offset+"&limit="+$scope.limit+"&term="+$scope.term;
-      var fullUrl = $scope.apiUrl+params;
+      var fullUrl = $scope.apiUrl + params;
       $scope.downloadUrl = "/xls"+params;
 	  $scope.doLoad(fullUrl);
 
@@ -140,6 +140,10 @@ searchAPI.controller('searchController',['$scope', '$http','$interval', function
   $scope.reload = function(keyEvent) {
 
 	  if (keyEvent.which === 13){
+		  $scope.showPrev= true;
+		  $scope.showNext= true;
+		  $scope.term="";
+		  $scope.asyncSelected = "";
 		  var params = "?offset="+$scope.offset+"&limit="+$scope.limit;
 	      var fullUrl = $scope.apiUrl+params;
 	      $scope.downloadUrl = "/xls"+params;

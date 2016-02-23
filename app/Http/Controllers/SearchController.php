@@ -9,6 +9,7 @@ use \App\Models\Variables;
 use \Socrata;
 use App\Http\Controllers\SearchController;
 use Illuminate\Http\Request;
+use Illuminate\Config\Repository;
 
 
 
@@ -22,11 +23,10 @@ class SearchController extends Controller
 	protected $socrata;
 	
 	protected $endpoint = "https://openpaymentsdata.cms.gov/resource/mw4g-bs44.json";
-	//protected  $endpoint = "https://openpaymentsdata.cms.gov/resource/mw4g-bs44";
+
 	
-	
-	protected $appKey = "DDpGhebFsY3lFGL2r4mZe5Zwl";
-	
+
+
 	
 	protected $columns = array( 
 			"record_id"=>"record_id",
@@ -84,7 +84,8 @@ class SearchController extends Controller
 	
 	public function __construct(){
 			
-		$this->socrata = new \Socrata($this->endpoint, $this->appKey);
+		$appKey = config('OPEN_DATA_APP_KEY');
+		$this->socrata = new \Socrata($this->endpoint, $appKey);
 		
 	}
 	
@@ -141,12 +142,21 @@ class SearchController extends Controller
 			
 			$totalRecords =$this->getODTotalRecords();
 			
+			if($request->has('term')){
+				$term = $request->input('term');
+				
+				$payments = DB::table('payments')
+				->select($this->defaultColumns)
+				->where('physician_last_name', 'LIKE', '%' . $term . '%')
+				->orWhere('teaching_hospital_name', 'LIKE', '%' . $term . '%')
+				->orWhere('applicable_manufacturer_or_applicable_gpo_making_payment_name', 'LIKE', '%' . $term . '%')
+				->get();
+				
+			}else{
 
-			
+				$payments = DB::table('payments')->select($this->defaultColumns)->skip($offset)->take($limit)->get();
 
-			$payments = DB::table('payments')->select($this->defaultColumns)->skip($offset)->take($limit)->get();
-
-
+			}
 			
 			list($data, $colList) = $this->prepResp($payments);
 			

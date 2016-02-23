@@ -155,7 +155,7 @@
 						
 						<!-- <pre>Model: {{asyncSelected | json}}</pre>-->
 						<div style="width: 200px; margin: 0px auto;">
-					    	<input type="text" ng-model="asyncSelected"   placeholder="Search" uib-typeahead="term.name for term in getPayment($viewValue)" typeahead-on-select='onSelect($item, $model, $label)' typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
+					    	<input type="text" ng-model="asyncSelected"   placeholder="Search" uib-typeahead="term.name for term in getPayment($viewValue)" typeahead-on-select='onSel($item, $model, $label)' typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
 					   		<a ng-click="clearSearch()" >Clear Search</a>
 					    </div>
 
@@ -210,8 +210,7 @@
 	                
 	                
                 </div>
-                
-                
+
             </div>
         </div>
     </body>

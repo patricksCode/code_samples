@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'debug' => env('APP_DEBUG', true),
+    'debug' => env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -39,7 +39,8 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://reorg.mac'),
+    //'url' => env('APP_URL', 'http://reorg.mac'),
+	'url' => env('APP_URL', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -203,5 +204,7 @@ return [
         'View'      => Illuminate\Support\Facades\View::class,
 
     ],
+		
+	'OPEN_DATA_APP_KEY' => env('OPEN_DATA_APP_KEY', ''),
 
 ];
