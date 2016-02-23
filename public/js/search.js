@@ -1,6 +1,6 @@
 var searchAPI = angular.module('search', ['ui.bootstrap']);
 
-searchAPI.controller('searchController',['$scope', '$http','$interval', function($scope, $http, $interval) {
+searchAPI.controller('searchController',['$scope', '$http','$interval', '$window', function($scope, $http, $interval, $window) {
 
 	$scope.apiUrl = apiUrl+"/ep/fe";
 	
@@ -23,7 +23,7 @@ searchAPI.controller('searchController',['$scope', '$http','$interval', function
 	
 	$scope.term = "";
 
-
+	var term = undefined;
 	
 
 	
@@ -50,38 +50,37 @@ searchAPI.controller('searchController',['$scope', '$http','$interval', function
 	};
 	
   $scope.initPage = function initPage() {
-	    var params = "?offset="+$scope.offset+"&limit="+$scope.limit;
-		var fullUrl = $scope.apiUrl+params;
-		$scope.downloadUrl = "/xls"+params;
-		$scope.doLoad(fullUrl);
+		
+		doPaginate($scope.offset);
     
   };
 	  
   $scope.doNext = function doNext() {
-		
-		var params ="?offset=" + nextOffset + "&limit="+$scope.limit;
-		var fullUrl = $scope.apiUrl+params;
-		$scope.downloadUrl = "/xls"+params;
-		$scope.doLoad(fullUrl);
+
+		doPaginate(nextOffset);
     
   };
   $scope.doPrev = function doPrev() {
-	  	var params = "?offset=" + prevOffset + "&limit="+$scope.limit;
-		var fullUrl = $scope.apiUrl+ params;
-		$scope.downloadUrl = "/xls"+params;
-		$scope.doLoad(fullUrl);
+		
+		doPaginate(prevOffset);
     
   };
   
-  $scope.callAtInterval = function() {
-      console.log("$scope.callAtInterval - Interval occurred");
-  }
+  $scope.connection = 'offline'; 
+  
 
- /* $interval( function(){ 
-	  $http.get('/gd')
-  }, 30000);*/
+
+ 
+
   
+  $interval( function(){
+
+	   if (navigator.onLine) {
+			 $http.get('/gd');
+		}
+  }, 30000);
   
+
   
   /*
    * the following classes are for type ahead
@@ -117,40 +116,56 @@ searchAPI.controller('searchController',['$scope', '$http','$interval', function
 	  $scope.showPrev= false;
 	  $scope.showNext= false;
 	  $scope.term = $item.name;
-	  var params = "?offset="+$scope.offset+"&limit="+$scope.limit+"&term="+$scope.term;
-      var fullUrl = $scope.apiUrl + params;
-      $scope.downloadUrl = "/xls"+params;
-	  $scope.doLoad(fullUrl);
+
+	  
+	  term = $scope.term;
+	  doPaginate($scope.offset);
 
 
   };
   
   $scope.clearSearch = function () {
-	  $scope.showPrev= true;
-	  $scope.showNext= true;
-	  $scope.term="";
-	  $scope.asyncSelected = "";
-	  var params = "?offset="+$scope.offset+"&limit="+$scope.limit;
-      var fullUrl = $scope.apiUrl+params;
-      $scope.downloadUrl = "/xls"+params;
-	  $scope.doLoad(fullUrl);
+	  setSearchParamsTrue();
+	  term = undefined;
+
+	  
+	  doPaginate($scope.offset);
 
   };
   
   $scope.reload = function(keyEvent) {
 
 	  if (keyEvent.which === 13){
-		  $scope.showPrev= true;
-		  $scope.showNext= true;
-		  $scope.term="";
-		  $scope.asyncSelected = "";
+		  setSearchParamsTrue();
 		  var params = "?offset="+$scope.offset+"&limit="+$scope.limit;
 	      var fullUrl = $scope.apiUrl+params;
 	      $scope.downloadUrl = "/xls"+params;
 	  	  $scope.doLoad(fullUrl);
 	  }
   };
-
+  
+  function setSearchParamsTrue(){
+	  $scope.showPrev= true;
+	  $scope.showNext= true;
+	  $scope.term="";
+	  $scope.asyncSelected = "";
+	  
+	  
+  }
+  
+  function doPaginate(offset){
+	  
+	  var params = "?offset=" + offset + "&limit="+$scope.limit;
+	  
+	  if(term!=undefined){
+		 params+="&term="+$scope.term 
+	  }
+	  
+	  var fullUrl = $scope.apiUrl+ params;
+	  $scope.downloadUrl = "/xls"+params;
+	  $scope.doLoad(fullUrl);
+	  
+  }
   
 
 }]);

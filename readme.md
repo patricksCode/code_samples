@@ -1,24 +1,32 @@
 # Reorg-test website
 
-This is an application built by Patrick Archer.  It is built using PHP, Laravel Framework, Angularjs, MYSQL.  To configure this on your own machine, please follow the following instructions.
+This is an application built by Patrick Archer.  It is built using PHP, Laravel Framework, Angularjs, MYSQL. So you have to have these applications configured on your webserver at the minimum. Once that is done, you just have to configure your environment(.env) file..  
 
-1. Open the env file in the root of the app directory and change the environment variables.
+## Installation Instructions
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+1.  Copy the application down to your local drive.  Edit your webservers config file(httpd.conf for apache) and add a virtual host for this application.  For apache it would look something like this:
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+		<VirtualHost *:80>
+		    ServerAdmin webmaster@reorg.mac
+		    DocumentRoot "/www/vhosts/reorg/public"
+		    ServerName reorg.mac
+		 
+		    ErrorLog "logs/reorg.mac-error_log"
+		    CustomLog "logs/reorg.mac-access_log" common
+		</VirtualHost>
 
-## Official Documentation
+   You need to edit the parameters to match your configuration.
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
 
-## Contributing
+2. Open the env file in the root of the app directory and change the environment variables.  At minimum update the OPEN_DATA_APP_KEY.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+3. Import the reorg.sql file.  This will create your database with all table structures and also the db user .
 
-## Security Vulnerabilities
+4. There is also a script that that updates the db with data when the app first opens and ever 30 seconds when the search page is open.
+This script can be run by a cron job also.  The url is /gd.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+
+
 
 ## License
 

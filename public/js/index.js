@@ -8,7 +8,9 @@ ctrl.controller('indexController',['$scope', '$http','$timeout', '$window', func
 	
 	  $scope.initPage = function initPage() {
 		  
-		  $http.get('/gd');
+		  if (navigator.onLine) {
+			  $http.get('/gd');
+		  }
 		  $timeout($scope.doInit, 5000);
 	    
 	  };

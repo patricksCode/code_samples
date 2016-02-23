@@ -302,16 +302,28 @@ class SearchController extends Controller
      * method to get total records count from OpenPaymentsData.CMS.gov
      */
     private function getODTotalRecords(){
-    	$query=array('$query'=>"select count(record_id) as total");
-    	$params = $this->getParams($query);
-    	 
-    	$response = $this->socrata->get($params);
     	
-    	$variable = \App\Models\Variables::create(['name' => 'totalRecords', 'value'=>$response[0]['total']]);;
+    	$count = DB::table('variables')
+    	->select('value')->where('name', '=', 'totalRecords')
+    	->take(1)->get();
+
     	
+    	
+    	if(!count($count)){
+	    	$query=array('$query'=>"select count(record_id) as total");
+	    	$params = $this->getParams($query);
+	    	 
+	    	$response = $this->socrata->get($params);
+	    	
+	    	$variable = \App\Models\Variables::firstorcCreate(['name' => 'totalRecords', 'value'=>$response[0]['total']]);;
+	    	
+	    	$total = $variable->value;
+    	}else{
+    		$total= $count[0]->value;	
+    	}
 
     	 
-    	return $variable->value;
+    	return $total;
     	
     }
     
@@ -328,38 +340,16 @@ class SearchController extends Controller
     	$currCols=array();
     	
 
-    	$drugs = array("","name_of_associated_covered_drug_or_biological1",
-						"name_of_associated_covered_drug_or_biological2",
-						"name_of_associated_covered_drug_or_biological3",
-						"name_of_associated_covered_drug_or_biological4",
-						"name_of_associated_covered_drug_or_biological5",);
-    	
-   		$devices = array("name_of_associated_covered_device_or_medical_supply1",
-						"name_of_associated_covered_device_or_medical_supply2",
-						"name_of_associated_covered_device_or_medical_supply3",
-						"name_of_associated_covered_device_or_medical_supply4",
-						"name_of_associated_covered_device_or_medical_supply5"
-   				);
     	
     	foreach($data as $rKey=>$row){
     		
-    		//$newParam[$rKey]['name']=array();
-    		//$newParam[$rKey]['drugs']=array();
-    		//$newParam[$rKey]['devices']=array();
+
     		
     		foreach($row as $key=>$col){
 
-    			if(array_search($key,$drugs)){
-    				$newParam[$rKey]['drugs'][]=$col;
-    				
-    			}
-    			elseif(array_search($key,$drugs)){
-    				$newParam[$rKey]['devices'][]=$col;
+
+    			$newParam[$rKey][$key]=$col;
     			
-    			}
-    			else{
-    				$newParam[$rKey][$key]=$col;
-    			}
     			if(!array_search($key, $tempCols)){
     				$tempCols[]=$key ;
     			}	
@@ -368,18 +358,6 @@ class SearchController extends Controller
     		}
 
 
-    		if(isset($newParam[$rKey]['name'])){
-    			$newParam[$rKey]['name'] = implode(", ",$newParam[$rKey]['name']);
-    			
-    		}
-    		if(isset($newParam[$rKey]['drugs'])){
-    			$newParam[$rKey]['drugs'] = implode(", ",$newParam[$rKey]['drugs']);
-    			 
-    		}
-    		if(isset($newParam[$rKey]['devices'])){
-    			$newParam[$rKey]['devices'] = implode(", ",$newParam[$rKey]['devices']);
-    		
-    		}
     		
     	}
     	// sort the columns in the right order
