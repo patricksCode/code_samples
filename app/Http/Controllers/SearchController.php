@@ -208,19 +208,24 @@ class SearchController extends Controller
 		
 		list($data, $colList) = $this->prepResp($payments);
 		
-		//$tempArray = array_merge($colList, $data);
+		//print_r($colList); exit();
+		
+		foreach($colList as $col){
+			$tempCol[]=$col;
+		}
+
+		$excel.=implode("\t", $tempCol) . "\n";
 		
 		foreach($data as $tempRow){
 			$tempCol = array();
-			
-			//print_r($tempRow);
+
 			
 			foreach($tempRow as $key=>$col){
 				$tempCol[]=$col;
 			}
 			
-			$newRow= implode("\t", $tempCol);
-			$excel.=$newRow . "\n";
+
+			$excel.=implode("\t", $tempCol). "\n";
 			
 		}
 
