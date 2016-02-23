@@ -88,7 +88,9 @@
             .navigation{
             	width: 100%;  float: left; margin-bottom: 5px;
             }
-
+			a:hover{
+            	cursor: pointer; cursor: hand;
+            }
 
 
             
@@ -153,7 +155,7 @@
 						
 						<!-- <pre>Model: {{asyncSelected | json}}</pre>-->
 						<div style="width: 200px; margin: 0px auto;">
-					    	<input type="text" ng-model="asyncSelected"  placeholder="Search" uib-typeahead="term.name for term in getPayment($viewValue)" typeahead-on-select='onSelect($item, $model, $label)' typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
+					    	<input type="text" ng-model="asyncSelected"   placeholder="Search" uib-typeahead="term.name for term in getPayment($viewValue)" typeahead-on-select='onSelect($item, $model, $label)' typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
 					   		<a ng-click="clearSearch()" >Clear Search</a>
 					    </div>
 
@@ -168,7 +170,7 @@
 
                 		</div>
                 		<div class="countDiv">
-                				<label>Number of Rows:</label> <input type="number" min="0" max="500" maxlength="3" size="3" ng-model="limit">
+                				<label>Number of Rows:</label> <input type="number" min="0" max="500" maxlength="3" size="3" ng-keypress="reload($event)" ng-model="limit">
                 				
                 		</div>
                 		<div class="next">
@@ -180,9 +182,10 @@
 					</div>
 					<div class="navigation">
 
-						<div>
+						<div style="width: 50%; display: inline; float: left; text-align: left;">
 							Row <span class="boldText">{{ offset }}</span> to <span class="boldText">{{ offset + rows.length }}</span> of <span class="boldText">{{ totalRecords }}</span> Records
 						</div>
+						<div style="width: 50%; display: inline; float: right; text-align: right;"><a href="{{ downloadUrl }}">Download</a></div>
 
 					
 					</div>

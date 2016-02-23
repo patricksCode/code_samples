@@ -14,9 +14,8 @@ searchAPI.controller('searchController',['$scope', '$http','$interval', function
 	
 	$scope.showTable = false;
 	
-	  $scope.showPrev= true;
-	  $scope.showNext= true;
-	
+	$scope.showPrev= true;
+	$scope.showNext= true;
 	
 	var nextOffset;
 	
@@ -51,19 +50,25 @@ searchAPI.controller('searchController',['$scope', '$http','$interval', function
 	};
 	
   $scope.initPage = function initPage() {
-		var fullUrl = $scope.apiUrl+"?offset="+$scope.offset+"&limit="+$scope.limit;
+	    var params = "?offset="+$scope.offset+"&limit="+$scope.limit;
+		var fullUrl = $scope.apiUrl+params;
+		$scope.downloadUrl = "/xls"+params;
 		$scope.doLoad(fullUrl);
     
   };
 	  
   $scope.doNext = function doNext() {
-		var fullUrl = $scope.apiUrl+"?offset=" + nextOffset + "&limit="+$scope.limit;
+		
+		var params ="?offset=" + nextOffset + "&limit="+$scope.limit;
+		var fullUrl = $scope.apiUrl+params;
+		$scope.downloadUrl = "/xls"+params;
 		$scope.doLoad(fullUrl);
     
   };
   $scope.doPrev = function doPrev() {
-
-		var fullUrl = $scope.apiUrl+"?offset=" + prevOffset + "&limit="+$scope.limit;
+	  	var params = "?offset=" + prevOffset + "&limit="+$scope.limit;
+		var fullUrl = $scope.apiUrl+ params;
+		$scope.downloadUrl = "/xls"+params;
 		$scope.doLoad(fullUrl);
     
   };
@@ -112,7 +117,9 @@ searchAPI.controller('searchController',['$scope', '$http','$interval', function
 	  $scope.showPrev= false;
 	  $scope.showNext= false;
 	  $scope.term = $item.name;
-      var fullUrl = $scope.apiUrl+"?offset="+$scope.offset+"&limit="+$scope.limit+"&term="+$scope.term;
+	  var params = "?offset="+$scope.offset+"&limit="+$scope.limit+"&term="+$scope.term;
+      var fullUrl = $scope.apiUrl+params;
+      $scope.downloadUrl = "/xls"+params;
 	  $scope.doLoad(fullUrl);
 
 
@@ -123,9 +130,21 @@ searchAPI.controller('searchController',['$scope', '$http','$interval', function
 	  $scope.showNext= true;
 	  $scope.term="";
 	  $scope.asyncSelected = "";
-      var fullUrl = $scope.apiUrl+"?offset="+$scope.offset+"&limit="+$scope.limit;
+	  var params = "?offset="+$scope.offset+"&limit="+$scope.limit;
+      var fullUrl = $scope.apiUrl+params;
+      $scope.downloadUrl = "/xls"+params;
 	  $scope.doLoad(fullUrl);
 
+  };
+  
+  $scope.reload = function(keyEvent) {
+
+	  if (keyEvent.which === 13){
+		  var params = "?offset="+$scope.offset+"&limit="+$scope.limit;
+	      var fullUrl = $scope.apiUrl+params;
+	      $scope.downloadUrl = "/xls"+params;
+	  	  $scope.doLoad(fullUrl);
+	  }
   };
 
   
