@@ -66,7 +66,7 @@
 
             
             .thRow th, .dRow td{
-            	padding: 10px; border-bottom: 1px solid #cccccc; margin 0px; 
+            	padding: 10px; border-bottom: 1px solid #cccccc; margin 0px;  text-align: center
             }
             
             .navRow{
@@ -151,19 +151,20 @@
 							<input type="text"  ng-model="searchText" placeholder="Search"><a ng-click="doNext()" >Search >></a>
 						</div>-->
 						
-						<pre>Model: {{asyncSelected | json}}</pre>
-					    <input type="text" ng-model="asyncSelected"  placeholder="Search" uib-typeahead="term.name for term in getPayment($viewValue)" typeahead-on-select='onSelect($item, $model, $label)' typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
-					    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-					    <div ng-show="noResults">
-					      <i class="glyphicon glyphicon-remove"></i> No Results Found
+						<!-- <pre>Model: {{asyncSelected | json}}</pre>-->
+						<div style="width: 200px; margin: 0px auto;">
+					    	<input type="text" ng-model="asyncSelected"  placeholder="Search" uib-typeahead="term.name for term in getPayment($viewValue)" typeahead-on-select='onSelect($item, $model, $label)' typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
+					   		<a ng-click="clearSearch()" >Clear Search</a>
 					    </div>
+
+	
 					
 					</div>
 					<div class="navigation">
 						<div class="prev">
 
 
-                				<a ng-show="offset" ng-click="doPrev()" >PREV</a>&nbsp;
+                				<a ng-show="offset && showPrev" ng-click="doPrev()"  >PREV</a>&nbsp;
 
                 		</div>
                 		<div class="countDiv">
@@ -172,7 +173,7 @@
                 		</div>
                 		<div class="next">
 
-                				<a ng-click="doNext()" >NEXT</a>
+                				<a ng-show="showNext" ng-click="doNext()" >NEXT</a>
                 		</div>
 
 					

@@ -14,10 +14,15 @@ searchAPI.controller('searchController',['$scope', '$http','$interval', function
 	
 	$scope.showTable = false;
 	
+	  $scope.showPrev= true;
+	  $scope.showNext= true;
+	
 	
 	var nextOffset;
 	
 	var prevOffset;
+	
+	$scope.term = "";
 
 
 	
@@ -25,6 +30,7 @@ searchAPI.controller('searchController',['$scope', '$http','$interval', function
 	
   $scope.doLoad = function doLoad(fullUrl) {
 			if(fullUrl!=""){
+
 			    $http.get(fullUrl).then(function(response) {
 			    	$scope.rows = response.data[0];
 			    	$scope.columns = response.data[1];
@@ -56,6 +62,7 @@ searchAPI.controller('searchController',['$scope', '$http','$interval', function
     
   };
   $scope.doPrev = function doPrev() {
+
 		var fullUrl = $scope.apiUrl+"?offset=" + prevOffset + "&limit="+$scope.limit;
 		$scope.doLoad(fullUrl);
     
@@ -102,9 +109,22 @@ searchAPI.controller('searchController',['$scope', '$http','$interval', function
   };
   
   $scope.onSelect = function ($item, $model, $label) {
-      console.log($item);
-      console.log($model);
-      console.log($label);
+	  $scope.showPrev= false;
+	  $scope.showNext= false;
+	  $scope.term = $item.name;
+      var fullUrl = $scope.apiUrl+"?offset="+$scope.offset+"&limit="+$scope.limit+"&term="+$scope.term;
+	  $scope.doLoad(fullUrl);
+
+
+  };
+  
+  $scope.clearSearch = function () {
+	  $scope.showPrev= true;
+	  $scope.showNext= true;
+	  $scope.term="";
+	  $scope.asyncSelected = "";
+      var fullUrl = $scope.apiUrl+"?offset="+$scope.offset+"&limit="+$scope.limit;
+	  $scope.doLoad(fullUrl);
 
   };
 
