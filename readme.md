@@ -8,7 +8,7 @@ This is an application built by Patrick Archer.  It is built using PHP, Laravel 
 
 
 
-2.  Copy the application down to your local drive.  Edit your webservers config file(httpd.conf for apache) and add a virtual host for this application.  For apache it would look something like this:
+2.  Copy the application down to your local drive.  Edit your webservers config file(httpd.conf for apache) and add a virtual host for this application.  Your Documentroot is '/public'.  For apache it would look something like this:
 
 		<VirtualHost *:80>
 		    ServerAdmin webmaster@reorg.mac
