@@ -1,6 +1,6 @@
-var searchAPI = angular.module('search', ['ui.bootstrap']);
+var searchAPI = angular.module('search', ['ui.bootstrap', 'angularSpinner']);
 
-searchAPI.controller('searchController',['$scope', '$http','$interval', '$window', function($scope, $http, $interval, $window) {
+searchAPI.controller('searchController',['$scope', '$http','$interval', function($scope, $http, $interval) {
 
 	$scope.apiUrl = apiUrl+"/ep/fe";
 	
@@ -16,6 +16,7 @@ searchAPI.controller('searchController',['$scope', '$http','$interval', '$window
 	
 	$scope.showPrev= true;
 	$scope.showNext= true;
+	$scope.showCount= true;
 	
 	var nextOffset;
 	
@@ -29,7 +30,7 @@ searchAPI.controller('searchController',['$scope', '$http','$interval', '$window
 	
   $scope.doLoad = function doLoad(fullUrl) {
 			if(fullUrl!=""){
-
+				$scope.showSpinner= true;
 			    $http.get(fullUrl).then(function(response) {
 			    	$scope.rows = response.data[0];
 			    	$scope.columns = response.data[1];
@@ -44,6 +45,7 @@ searchAPI.controller('searchController',['$scope', '$http','$interval', '$window
 			    	
 			    	$scope.totalRecords = response.data[3];
 			    	$scope.showTable = true;
+			    	$scope.showSpinner= false;
 		
 			});
 		}	    
@@ -66,13 +68,6 @@ searchAPI.controller('searchController',['$scope', '$http','$interval', '$window
     
   };
   
-  $scope.connection = 'offline'; 
-  
-
-
- 
-
-  
   $interval( function(){
 
 	   if (navigator.onLine) {
@@ -92,7 +87,8 @@ searchAPI.controller('searchController',['$scope', '$http','$interval', '$window
 	        type: 'ta'
 	      }
 	    }).then(function(response){
-	    		return response.data;
+	    	
+	    		return response.data.splice(0, 20);
 	    });
 	  };
 
@@ -115,6 +111,7 @@ searchAPI.controller('searchController',['$scope', '$http','$interval', '$window
   $scope.onSel = function ($item, $model, $label) {
 	  $scope.showPrev= false;
 	  $scope.showNext= false;
+	  $scope.showCount= false;
 	  $scope.term = $item.name;
 
 	  
@@ -125,12 +122,14 @@ searchAPI.controller('searchController',['$scope', '$http','$interval', '$window
   };
   
   $scope.clearSearch = function () {
-	  setSearchParamsTrue();
-	  term = undefined;
-
-	  
-	  doPaginate($scope.offset);
-
+	  if(term!=undefined){
+		  setSearchParamsTrue();
+		  term = undefined;
+	
+		  
+		  doPaginate($scope.offset);
+	  }
+  
   };
   
   $scope.reload = function(keyEvent) {
@@ -147,6 +146,7 @@ searchAPI.controller('searchController',['$scope', '$http','$interval', '$window
   function setSearchParamsTrue(){
 	  $scope.showPrev= true;
 	  $scope.showNext= true;
+	  $scope.showCount= true;
 	  $scope.term="";
 	  $scope.asyncSelected = "";
 	  

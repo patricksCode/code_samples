@@ -73,7 +73,7 @@ class SearchController extends Controller
 									"specialty"=>"physician_specialty",
 									"company_making_payment"=>"applicable_manufacturer_or_applicable_gpo_making_payment_name",
 									"amount"=>"total_amount_of_payment_usdollars",
-									"entry_date"=>"payment_publication_date",
+									"payment date"=>"date_of_payment",
 			
 			
 			
@@ -346,7 +346,9 @@ class SearchController extends Controller
 
     		
     		foreach($row as $key=>$col){
-
+    			if($key=="date_of_payment"){
+    				$col=date_format(date_create($col),"m/d/Y");
+    			}
 
     			$newParam[$rKey][$key]=$col;
     			
@@ -363,6 +365,7 @@ class SearchController extends Controller
     	// sort the columns in the right order
     	foreach($this->columns as $cKey=>$cVal){
     		if(array_search($cKey, $tempCols) && !array_search($cVal, $currCols )){
+    			
     			$currCols[$cKey]=$cVal;
     		}
     	}

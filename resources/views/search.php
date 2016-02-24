@@ -10,6 +10,8 @@
 
 		<script  src="<?php echo URL::asset('js/angular.min.js');?>"></script> 
 		<script  src="<?php echo URL::asset('js/ui-bootstrap-tpls-1.1.2.min.js') ;?>"></script> 
+		<script  src="<?php echo URL::asset('js/spin.js');?>"></script> 
+		<script  src="<?php echo URL::asset('js/angular-spinner.js');?>"></script> 
 		<script type="text/javascript">
 
 			var limit =<?php echo $limit?>;
@@ -144,6 +146,7 @@
     <body >
         <div class="container" ng-app="search" ng-controller="searchController as search" ng-init="initPage()" >
             <div  class="content">
+            <span us-spinner spinner-on="showSpinner"></span>
                 <div class="title">payments</div>
                 <p ng-hide="showTable">starting .....</p> 
                 <div class="innerBody" ng-show="showTable">
@@ -169,7 +172,7 @@
                 				<a ng-show="offset && showPrev" ng-click="doPrev()"  >PREV</a>&nbsp;
 
                 		</div>
-                		<div class="countDiv">
+                		<div class="countDiv" >
                 				<label>Number of Rows:</label> <input type="number" min="0" max="500" maxlength="3" size="3" ng-keypress="reload($event)" ng-model="limit">
                 				
                 		</div>
@@ -182,7 +185,7 @@
 					</div>
 					<div class="navigation">
 
-						<div style="width: 50%; display: inline; float: left; text-align: left;">
+						<div style="width: 50%; display: inline; float: left; text-align: left;" ng-Show="showCount">
 							Row <span class="boldText">{{ offset }}</span> to <span class="boldText">{{ offset + rows.length }}</span> of <span class="boldText">{{ totalRecords }}</span> Records
 						</div>
 						<div style="width: 50%; display: inline; float: right; text-align: right;"><a href="{{ downloadUrl }}">Download</a></div>
