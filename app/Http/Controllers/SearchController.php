@@ -292,7 +292,7 @@ class SearchController extends Controller
 	    	 
 	    	$response = $this->socrata->get($params);
 	    	
-	    	$variable = \App\Models\Variables::firstorcCreate(['name' => 'totalRecords', 'value'=>$response[0]['total']]);;
+	    	$variable = \App\Models\Variables::firstOrCreate(['name' => 'totalRecords', 'value'=>$response[0]['total']]);;
 	    	
 	    	$total = $variable->value;
     	}else{

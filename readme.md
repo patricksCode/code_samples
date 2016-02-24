@@ -20,9 +20,9 @@ This is an application built by Patrick Archer.  It is built using PHP, Laravel 
 
 2. Open the env_example file in the root of the app directory and change the environment variables.  At minimum update the OPEN_DATA_APP_KEY. Then rename env_example to .env
 
-3. Import the reorg.sql file into your mysql db.  This will create your database with all table structures and also the db user .
+3. Import the database\reorg.sql file into your mysql db.  This will create your database with all table structures and also the db user .
 
-4. There is also a script that that updates the db with data from open payments when the app first opens and every 30 seconds when the search page is open.  This script can be run by a cron job also.  The url is /gd.
+4. There is also a script that that updates the db with data from open payments when the app first opens and every 30 seconds when the search page is open.  This script can be run by a cron job also.  The url is "/gd".
 
 5.  Navigate to your homepage after that and you are good to go.
 
