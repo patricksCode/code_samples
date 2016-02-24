@@ -4,7 +4,11 @@ This is an application built by Patrick Archer.  It is built using PHP, Laravel 
 
 ## Installation Instructions
 
-1.  Copy the application down to your local drive.  Edit your webservers config file(httpd.conf for apache) and add a virtual host for this application.  For apache it would look something like this:
+
+
+
+
+2.  Copy the application down to your local drive.  Edit your webservers config file(httpd.conf for apache) and add a virtual host for this application.  For apache it would look something like this:
 
 		<VirtualHost *:80>
 		    ServerAdmin webmaster@reorg.mac
@@ -17,10 +21,10 @@ This is an application built by Patrick Archer.  It is built using PHP, Laravel 
 
    You need to edit the parameters to match your configuration.
 
+2. Import the database\reorg.sql file into your mysql db.  This will create your database with all table structures .  Then create a user for the reorg-test database name 'dbUser'.  Use 'AxJGKXDaYvMdwK7v' as the password for the db user.  If you change these values, make sure you edit the env_example file.
 
-2. Open the env_example file in the root of the app directory and change the environment variables.  At minimum update the OPEN_DATA_APP_KEY. Then rename env_example to .env
+3. Open the env_example file in the root of the app directory and change the environment variables.  At minimum update the OPEN_DATA_APP_KEY. Then rename env_example to .env
 
-3. Import the database\reorg.sql file into your mysql db.  This will create your database with all table structures and also the db user .
 
 4. There is also a script that that updates the db with data from open payments when the app first opens and every 30 seconds when the search page is open.  This script can be run by a cron job also.  The url is "/gd".
 
