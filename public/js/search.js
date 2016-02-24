@@ -15,14 +15,19 @@ searchAPI.controller('searchController',['$scope', '$http','$interval', function
 	$scope.showTable = false;
 	
 	$scope.showPrev= true;
+	
 	$scope.showNext= true;
+	
 	$scope.showCount= true;
+	
+	$scope.showSpinner = false;
+	
+	$scope.term = "";
 	
 	var nextOffset;
 	
 	var prevOffset;
-	
-	$scope.term = "";
+
 
 	var term = undefined;
 	

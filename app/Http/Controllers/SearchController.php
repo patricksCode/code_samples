@@ -18,50 +18,44 @@ use Illuminate\Config\Repository;
 class SearchController extends Controller
 {
 	
-	protected $layout = 'layouts.master';
+
 	
 	protected $socrata;
 	
 	protected $endpoint = "https://openpaymentsdata.cms.gov/resource/mw4g-bs44.json";
 
-	
-
-
-	
 	protected $columns = array( 
-			"record_id"=>"record_id",
-			"physician_profile_id"=>"physician_id",
-			"teaching_hospital_name"=>"hospital name",
-			"physician_first_name"=>"first name",
-			"physician_middle_name"=>"middle name",
-			"physician_last_name"=>"last name",
-			"recipient_primary_business_street_address_line1"=>"address line1",
-			"recipient_primary_business_street_address_line2"=>"address line2",
-			"recipient_city"=>"city",
-			"recipient_state"=>"state",
-			"recipient_zip_code"=>"zip_code",
-			"physician_primary_type"=>"type",
-			"physician_specialty"=>"specialty",
-			"applicable_manufacturer_or_applicable_gpo_making_payment_name"=>"company making payment",
-			"applicable_manufacturer_or_applicable_gpo_making_payment_state"=>"company making payment state",
-			"total_amount_of_payment_usdollars"=>"amount",
-			"date_of_payment"=>"payment date",
-			"form_of_payment_or_transfer_of_value"=>"form of payment",
-			"nature_of_payment_or_transfer_of_value"=>"nature of payment",
-			"contextual_information"=>"contextual information",
-			"name_of_associated_covered_drug_or_biological1"=>"drug1",
-			"name_of_associated_covered_drug_or_biological2"=>"drug2",
-			"name_of_associated_covered_drug_or_biological3"=>"drug3",
-			"name_of_associated_covered_drug_or_biological4"=>"drug4",
-			"name_of_associated_covered_drug_or_biological5"=>"drug5",
-			"name_of_associated_covered_device_or_medical_supply1"=>"device1",
-			"name_of_associated_covered_device_or_medical_supply2"=>"device2",
-			"name_of_associated_covered_device_or_medical_supply3"=>"device3",
-			"name_of_associated_covered_device_or_medical_supply4"=>"device4",
-			"name_of_associated_covered_device_or_medical_supply5"=>"device5",
-			"payment_publication_date"=>"entry_date",
-	
-				
+									"record_id"=>"record_id",
+									"physician_profile_id"=>"physician_id",
+									"teaching_hospital_name"=>"hospital name",
+									"physician_first_name"=>"first name",
+									"physician_middle_name"=>"middle name",
+									"physician_last_name"=>"last name",
+									"recipient_primary_business_street_address_line1"=>"address line1",
+									"recipient_primary_business_street_address_line2"=>"address line2",
+									"recipient_city"=>"city",
+									"recipient_state"=>"state",
+									"recipient_zip_code"=>"zip_code",
+									"physician_primary_type"=>"type",
+									"physician_specialty"=>"specialty",
+									"applicable_manufacturer_or_applicable_gpo_making_payment_name"=>"company making payment",
+									"applicable_manufacturer_or_applicable_gpo_making_payment_state"=>"company making payment state",
+									"total_amount_of_payment_usdollars"=>"amount",
+									"date_of_payment"=>"payment date",
+									"form_of_payment_or_transfer_of_value"=>"form of payment",
+									"nature_of_payment_or_transfer_of_value"=>"nature of payment",
+									"contextual_information"=>"contextual information",
+									"name_of_associated_covered_drug_or_biological1"=>"drug1",
+									"name_of_associated_covered_drug_or_biological2"=>"drug2",
+									"name_of_associated_covered_drug_or_biological3"=>"drug3",
+									"name_of_associated_covered_drug_or_biological4"=>"drug4",
+									"name_of_associated_covered_drug_or_biological5"=>"drug5",
+									"name_of_associated_covered_device_or_medical_supply1"=>"device1",
+									"name_of_associated_covered_device_or_medical_supply2"=>"device2",
+									"name_of_associated_covered_device_or_medical_supply3"=>"device3",
+									"name_of_associated_covered_device_or_medical_supply4"=>"device4",
+									"name_of_associated_covered_device_or_medical_supply5"=>"device5",
+									"payment_publication_date"=>"entry_date",		
 	);
 	
 	protected $defaultColumns = array( 
@@ -74,12 +68,6 @@ class SearchController extends Controller
 									"company_making_payment"=>"applicable_manufacturer_or_applicable_gpo_making_payment_name",
 									"amount"=>"total_amount_of_payment_usdollars",
 									"payment date"=>"date_of_payment",
-			
-			
-			
-			
-			
-			
 	);
 	
 	public function __construct(){
@@ -115,9 +103,6 @@ class SearchController extends Controller
 			->union($second)
 			->union($third)
 			->get();
-			
-
-			
 			
 		}else{
 			
@@ -179,16 +164,12 @@ class SearchController extends Controller
     	$limit=($request->has('limit') && $request->input('limit')>=10 && $request->input('limit')<=500)?$request->input('limit'):20;
     	$offset=$request->has('offset')?$request->input('offset'):0;
 
-    	return view('search',  [
-    			
+    	return view('search',  [		
     			'limit'=>$limit,
     			'offset'=>$offset,
     			"url"=>url()
     			]);
 
-    	
-    	
-    	
     }
     
 
@@ -241,8 +222,8 @@ class SearchController extends Controller
 
 		
 		return response($excel)
-		->header('Content-Type', "application/vnd.ms-excel")
-		->header('Content-disposition', 'attachment; filename=spreadsheet.xls');
+				->header('Content-Type', "application/vnd.ms-excel")
+				->header('Content-disposition', 'attachment; filename=spreadsheet.xls');
 
 		
 	}
@@ -274,8 +255,7 @@ class SearchController extends Controller
 	    	foreach($response as $key=>$row){
 	    		
 	    		$payment = \App\Models\Payment::create($row);
-
-	    		
+	
 	    	}
 
 	    	
@@ -291,8 +271,6 @@ class SearchController extends Controller
 
     	}
 
-    	
-    	
     }
     
 
@@ -307,8 +285,7 @@ class SearchController extends Controller
     	->select('value')->where('name', '=', 'totalRecords')
     	->take(1)->get();
 
-    	
-    	
+ 
     	if(!count($count)){
 	    	$query=array('$query'=>"select count(record_id) as total");
 	    	$params = $this->getParams($query);
@@ -342,9 +319,6 @@ class SearchController extends Controller
 
     	
     	foreach($data as $rKey=>$row){
-    		
-
-    		
     		foreach($row as $key=>$col){
     			if($key=="date_of_payment"){
     				$col=date_format(date_create($col),"m/d/Y");
@@ -355,12 +329,7 @@ class SearchController extends Controller
     			if(!array_search($key, $tempCols)){
     				$tempCols[]=$key ;
     			}	
-    			
-    			
     		}
-
-
-    		
     	}
     	// sort the columns in the right order
     	foreach($this->columns as $cKey=>$cVal){

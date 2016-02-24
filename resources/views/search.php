@@ -6,7 +6,7 @@
         <!--  <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">-->
         
          <link href="<?php echo URL::asset('css/bootstrap.css') ;?>" rel="stylesheet" type="text/css">
-
+		<link href="<?php echo URL::asset('css/search.css') ;?>" rel="stylesheet" type="text/css">
 
 		<script  src="<?php echo URL::asset('js/angular.min.js');?>"></script> 
 		<script  src="<?php echo URL::asset('js/ui-bootstrap-tpls-1.1.2.min.js') ;?>"></script> 
@@ -18,130 +18,13 @@
 
 			var offset = <?php echo $offset; ?>;
 
-
 			var apiUrl = "<?php echo $url->to('/'); ?>";
 
 
 		</script>
 		<script  src="<?php echo URL::asset('js/search.js');?>"></script> 
 		
-        <style>
-            html, body {
-                height: 100%;
-            }
 
-            body {
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                display: table;
-                font-weight: 100;
-                /*font-family: 'Lato';*/
-            }
-            
-            .innerBody{ 
-            	width: 70%; 
-            	margin: 0 auto;
-            	/*border: 1px solid black;*/
-				display: inline-block;
-            	}
-
-            .container {
-                text-align: center;
-                display: table-cell;
-                vertical-align: middle;
-            }
-
-            .content {
-                text-align: center;
-                display: inline-block;
-            }
-
-            .title {
-                font-size: 96px;
-            }
-            
-            
-            table{
-            	margin: 0 auto; border-spacing: 0px; border: 1px solid #cccccc;
-            }
-
-            
-            .thRow th, .dRow td{
-            	padding: 10px; border-bottom: 1px solid #cccccc; margin 0px;  text-align: center
-            }
-            
-            .navRow{
-            	width: 100%; margin: 0 auto; float: left;
-            }
-            
-            .prev, .next{
-            	width: 57px
-            }
-            
-            .prev:hover, .next:hover{
-            	cursor: pointer; cursor: hand;
-            }
-            
-            .search{
-            	width: 80%
-            }
-            
-            .navigation{
-            	width: 100%;  float: left; margin-bottom: 5px;
-            }
-			a:hover{
-            	cursor: pointer; cursor: hand;
-            }
-
-
-            
-            .prev {
-            	float: left;
-            }
-            .next{
-            	float: right;
-            }
-            .countDiv{
-
-            	display: inline;
-
-            }
-            
-            .boldText{
-            	font-weight: 900;
-            }
-            
-           
-		  .typeahead-demo .custom-popup-wrapper {
-		    position: absolute;
-		    top: 100%;
-		    left: 0;
-		    z-index: 1000;
-		    display: none;
-		    background-color: #f9f9f9;
-		  }
-		
-		  .typeahead-demo .custom-popup-wrapper > .message {
-		    padding: 10px 20px;
-		    border-bottom: 1px solid #ddd;
-		    color: #868686;
-		  }
-		
-		  .typeahead-demo .custom-popup-wrapper > .dropdown-menu {
-		    position: static;
-		    float: none;
-		    display: block;
-		    min-width: 160px;
-		    background-color: transparent;
-		    border: none;
-		    border-radius: 0;
-		    box-shadow: none;
-		  }
-  
-  
-        </style>
-    </head>
 
     <body >
         <div class="container" ng-app="search" ng-controller="searchController as search" ng-init="initPage()" >
