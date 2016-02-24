@@ -16,9 +16,10 @@
 
 			var limit =<?php echo $limit?>;
 
-			var offset = <?php echo $offset; ?>;
 
 			var apiUrl = "<?php echo $url->to('/'); ?>";
+
+			var totalRecord ="<?php echo $totalRecords; ?>";
 
 
 		</script>
@@ -56,20 +57,23 @@
 
                 		</div>
                 		<div class="countDiv" >
-                				<label>Number of Rows:</label> <input type="number" min="0" max="500" maxlength="3" size="3" ng-keypress="reload($event)" ng-model="limit">
+                				<label>Number of Rows:</label> <input type="number" min="0" max="999" maxlength="3" size="3" ng-keypress="reload($event)" ng-model="limit">
                 				
                 		</div>
                 		<div class="next">
 
-                				<a ng-show="showNext" ng-click="doNext()" >NEXT</a>
+                				<a ng-show="showNext |  (offset + rows.length) <= totalRecords" ng-click="doNext()" >NEXT</a>
                 		</div>
 
 					
 					</div>
 					<div class="navigation">
 
-						<div style="width: 50%; display: inline; float: left; text-align: left;" ng-Show="showCount">
+						<div style="width: 50%; display: inline; float: left; text-align: left;" ng-show="showCount">
 							Row <span class="boldText">{{ offset }}</span> to <span class="boldText">{{ offset + rows.length }}</span> of <span class="boldText">{{ totalRecords }}</span> Records
+						</div>
+						<div style="width: 50%; display: inline; float: left; text-align: left;" ng-hide="showCount">
+							<span class="boldText">{{ rows.length }}</span> Record<span ng-show="rows.length > 1">s</span>
 						</div>
 						<div style="width: 50%; display: inline; float: right; text-align: right;"><a href="{{ downloadUrl }}">Download</a></div>
 

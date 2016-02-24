@@ -167,7 +167,8 @@ class SearchController extends Controller
     	return view('search',  [		
     			'limit'=>$limit,
     			'offset'=>$offset,
-    			"url"=>url()
+    			"url"=>url(),
+    			"totalRecords"=>$this->getODTotalRecords()
     			]);
 
     }
