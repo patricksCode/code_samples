@@ -51,7 +51,7 @@ searchAPI.controller('searchController',['$scope', '$http','$interval', function
 			    	$scope.totalRecords = response.data[3];
 			    	$scope.showTable = true;
 			    	$scope.showSpinner= false;
-		
+
 			});
 		}	    
 	};
@@ -78,7 +78,7 @@ searchAPI.controller('searchController',['$scope', '$http','$interval', function
 	   if (navigator.onLine) {
 			 $http.get('/gd');
 		}
-  }, 30000);
+  }, 15000);
   
 
   

@@ -62,7 +62,7 @@
                 		</div>
                 		<div class="next">
 
-                				<a ng-show="showNext |  (offset + rows.length) <= totalRecords" ng-click="doNext()" >NEXT</a>
+                				<a ng-show="showNext" ng-click="doNext()" >NEXT</a>
                 		</div>
 
 					
