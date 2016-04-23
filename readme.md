@@ -1,4 +1,4 @@
-# Reorg-test website
+# Reorg-test website (http://rt.patarcher.net/)
 
 This is an application built by Patrick Archer.  It is built using PHP, Laravel Framework, Angularjs, MYSQL. So you have to have these applications configured on your webserver at the minimum. Once that is done, you just have to configure your environment(.env) file..  
 
